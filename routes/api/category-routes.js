@@ -3,9 +3,8 @@ const { Category, Product } = require("../../models");
 
 // The `/api/categories` endpoint
 
+// Gets all categories and includes associalted products
 router.get("/", async (req, res) => {
-  // find all categories
-  // be sure to include its associated Products
   try {
     const categories = await Category.findAll({ include: Product });
     res.status(200).json(categories);
@@ -14,9 +13,9 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Finds a single category by id and includes associated product data
+// If a category isn't found based on the id included in the request, 404 will be returned
 router.get("/:id", async (req, res) => {
-  // find one category by its `id` value
-  // be sure to include its associated Products
   try {
     const category = await Category.findByPk(req.params.id, { include: Product });
     if (!category) {
@@ -29,6 +28,11 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// Create a new category
+//  Example JSON body for request:
+// {
+//   "category_name": "New Category"
+// }
 router.post("/", async (req, res) => {
   try {
     const newCategory = await Category.create(req.body);
@@ -38,8 +42,10 @@ router.post("/", async (req, res) => {
   }
 });
 
+// Update a category by id
+// If a category isn't found based on the id included in the request, 404 will be returned
+// JSON body should look the same as what is included for the post route
 router.put("/:id", async (req, res) => {
-  // update a category by its `id` value
   try {
     const categoryData = await Category.update(req.body, {
       where: {
@@ -56,8 +62,9 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+// delete a category by id
+// If a category isn't found based on the id included in the request, 404 will be returned
 router.delete("/:id", async (req, res) => {
-  // delete a category by its `id` value
   try {
     const deletedCategory = await Category.destroy({
       where: {

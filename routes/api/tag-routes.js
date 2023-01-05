@@ -3,9 +3,8 @@ const { Tag, Product, ProductTag } = require("../../models");
 
 // The `/api/tags` endpoint
 
+// Gets all tags and includes associated product data
 router.get("/", async (req, res) => {
-  // find all tags
-  // be sure to include its associated Product data
   try {
     const tags = await Tag.findAll({ include: Product });
     res.status(200).json(tags);
@@ -14,9 +13,8 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Finds a single tag by id and includes associated product data
 router.get("/:id", async (req, res) => {
-  // find a single tag by its `id`
-  // be sure to include its associated Product data
   try {
     const tag = await Tag.findByPk(req.params.id, { include: Product });
     if (!tag) {
@@ -29,8 +27,12 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// Create a new tag
+//  Example JSON body for request:
+// {
+// 	"tag_name": "New Tag"
+// }
 router.post("/", async (req, res) => {
-  // create a new tag
   try {
     const newTag = await Tag.create(req.body);
     res.status(200).json(newTag);
@@ -39,8 +41,10 @@ router.post("/", async (req, res) => {
   }
 });
 
+// Update a tag's name by its id
+// If a tag isn't found based on the id included in the request, 404 will be returned
+// JSON body should look the same as what is included for the post route
 router.put("/:id", async (req, res) => {
-  // update a tag's name by its `id` value
   try {
     const tagData = await Tag.update(req.body, {
       where: {
@@ -57,8 +61,9 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+// Delete a tag by its id value
+// If a tag isn't found based on the id included in the request, 404 will be returned
 router.delete("/:id", async (req, res) => {
-  // delete on tag by its `id` value
   try {
     const deletedTag = await Tag.destroy({
       where: {

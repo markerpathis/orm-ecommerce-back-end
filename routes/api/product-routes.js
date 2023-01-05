@@ -3,10 +3,8 @@ const { Product, Category, Tag, ProductTag } = require("../../models");
 
 // The `/api/products` endpoint
 
-// get all products
+// Gets all products and includes associated categories and tags
 router.get("/", async (req, res) => {
-  // find all products
-  // be sure to include its associated Category and Tag data
   try {
     const products = await Product.findAll({ include: [{ model: Category }, { model: Tag }] });
     res.status(200).json(products);
@@ -15,10 +13,9 @@ router.get("/", async (req, res) => {
   }
 });
 
-// get one product
+// Finds a single product by id and includes associated categories and tags
+// If a product isn't found based on the id included in the request, 404 will be returned
 router.get("/:id", async (req, res) => {
-  // find a single product by its `id`
-  // be sure to include its associated Category and Tag data
   try {
     const product = await Product.findByPk(req.params.id, { include: [{ model: Category }, { model: Tag }] });
     if (!product) {
@@ -31,16 +28,16 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// create new product
+// Create new product
+//  Example JSON body for request:
+// {
+// 	"product_name": "New Product",
+// 	"price": 250.00,
+// 	"stock": 5,
+// 	"category_id": 1,
+// 	"tagIds": [1, 2, 3, 4]
+// }
 router.post("/", (req, res) => {
-  /* req.body should look like this...
-    {
-      product_name: "Basketball",
-      price: 200.00,
-      stock: 3,
-      tagIds: [1, 2, 3, 4]
-    }
-  */
   Product.create(req.body)
     .then((product) => {
       // if there's product tags, we need to create pairings to bulk create in the ProductTag model
@@ -63,9 +60,9 @@ router.post("/", (req, res) => {
     });
 });
 
-// update product
+// Update product
+// JSON body should look the same as what is included for the post route
 router.put("/:id", (req, res) => {
-  // update product data
   Product.update(req.body, {
     where: {
       id: req.params.id,
@@ -100,8 +97,9 @@ router.put("/:id", (req, res) => {
     });
 });
 
+// delete one product by its id value
+// If a product isn't found based on the id included in the request, 404 will be returned
 router.delete("/:id", async (req, res) => {
-  // delete one product by its `id` value
   try {
     const deletedProduct = await Product.destroy({
       where: {
