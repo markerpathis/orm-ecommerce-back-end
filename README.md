@@ -31,6 +31,7 @@ DB_PASSWORD=''
 Once the dependencies are installed, the user should use mysql to run the schema.sql file to set up the database and tables. If the user would also like to input some data, they should run the index.js file in the route api folder. After these steps, the user can enter the following command into the command-line to turn on the server - "node index.js". API requests can then be made using software such as Insomnia.
 
 A video walkthrough of the application being used is included at the link below:<br />
+https://user-images.githubusercontent.com/111654725/210910918-0958fe89-538c-414d-b076-429324796611.mp4
 
 ## License
 
